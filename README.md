@@ -201,150 +201,110 @@ El sistema presenta una separación clara entre el cliente (frontend) y los serv
 
 ![Copy of Diagrama de Despliegue](https://github.com/user-attachments/assets/d1159354-c255-487b-a1c1-e49460d87460)
 
+**Este sistema está compuesto por múltiples microservicios y componentes backend que se ejecutan dentro de una red privada Docker, expuestos mediante NGINX y balanceadores, y un cliente de escritorio desarrollado con Electron.js, que opera desde el equipo del usuario. Los servicios se comunican usando HTTP, AMQP o TCP/IP según su función.** 
+
+### **Cliente de Escritorio \- Electron.js**
+
+* **Tipo: Aplicación de escritorio**
+
+* **Tecnología: Electron.js (Node.js \+ Chromium)**
+
+* **Ubicación: Fuera del entorno Docker, en el dispositivo del usuario**
+
+
+### **Red Pública Docker (expuesta vía NGINX)**
+
+* **Balanceador de carga (GX\_NGINX\_balancer): HTTPS 443, 80**
+
+* **Frontend web (GX\_FE\_Gradex): HTTPS 3000**
+
+* **Proxy público (GX\_NGINX\_proxy): HTTPS 444**
 
 
 
+### **Red Privada Docker**
 
-Este sistema está compuesto por múltiples microservicios y componentes backend que se ejecutan dentro de una red interna Docker, y un componente cliente desarrollado con Electron.js, que opera desde el dispositivo del usuario final como aplicación de escritorio. Todos los servicios están expuestos por distintos puertos y protocolos, y se comunican mediante HTTP, AMQP o TCP/IP.
+#### **3\. GX\_API\_Gateway (Node.js/Apollo Server)**
 
- **Cliente de Escritorio \- Electron.js**
+* **Puerto expuesto: 4000**
 
-* **Tipo**: Aplicación de escritorio.  
-* **Tecnología**: Electron.js (Node.js \+ Chromium)  
-* **Ubicación**: Fuera del entorno Docker, en el equipo del. usuario.  
-* **Función**:  
-  * Interfaz gráfica de usuario del sistema.  
-  * Se conecta a múltiples servicios del backend mediante HTTP, AMQP o TCP/IP.  
-  * Sirve como punto de entrada principal del sistema para los usuarios finales.
+* **Rol: API Gateway**
 
- **Red Interna Docker**
+* **Responsabilidad: Orquestación de peticiones GraphQL, API rest de los microservicios.**
 
-Contiene todos los contenedores y servicios backend. Se encuentra encapsulada en una red interna aislada que permite la comunicación entre servicios por nombre y puerto.
+#### **4\. GX\_BE\_RabbitMQ (RabbitMQ)**
 
- **1\. GX\_BE\_Auth (Go)**
+* **Puerto AMQP: 5672, 5673**
 
-**Nombre del contenedor:** gx\_be\_auth  
- **Tecnología:** Go
+* **Rol: Broker AMQP**
 
-**Puerto expuesto:** 8082  
- **Rol:** Microservicio de Autenticación  
- **Responsabilidad:** Gestiona autenticación, registro, validación de credenciales, emisión de tokens JWT, y mantiene la seguridad del sistema mediante el control de acceso.
+* **Responsabilidad: Comunicación asincrónica.**
 
- **2\. GX\_BE\_EstCur (Django/Python)**
+#### **5\. GX\_BE\_ProAsig (Spring Boot/Java)**
 
-**Nombre del contenedor:** gx\_be\_estcur  
- **Tecnología:** Django (Python)
+* **Puerto expuesto: 8080**
 
-**Puerto expuesto:** 8083  
- **Rol:** Microservicio de Gestión de Estudiantes y Cursos  
- **Responsabilidad:** Manejo de operaciones CRUD relacionadas con estudiantes y cursos, administración de perfiles estudiantiles y organización académica básica.
+* **Rol: Gestión de Profesores y Asignaturas.**
 
- **3\. GX\_BE\_ProAsig (Spring Boot/Java)**
+#### **6\. GX\_BE\_EstCur (Django/Python)**
 
-**Nombre del contenedor:** gx\_be\_proasig  
- **Tecnología:** Spring Boot (Java)
+* **Puerto expuesto: 8000**
 
-**Puerto expuesto:** 8080  
- **Rol:** Microservicio de Gestión de Profesores y Asignaturas  
- **Responsabilidad:** Administración de los docentes y sus asignaturas asociadas. Permite crear, modificar, consultar y eliminar la información académica del personal docente.
+* **Rol: Gestión de Estudiantes y Cursos.**
 
- **4\. GX\_BE\_Calif (Spring Boot/Java)**
+#### **7\. GX\_DB\_EstCur (PostgreSQL)**
 
-**Nombre del contenedor:** gx\_be\_calif  
- **Tecnología:** Spring Boot (Java)
+* **Puerto expuesto: 5433**
 
-**Puerto expuesto:** 8081  
- **Rol:** Microservicio de Calificaciones  
- **Responsabilidad:** Control de las notas de los estudiantes: creación, modificación, consulta y almacenamiento seguro de calificaciones académicas.
+* **Rol: Base de datos de estudiantes y cursos.**
 
- **5\. GX\_FE\_Gradex (Next.js/React)**
+#### **8\. GX\_DB\_ProAsig (MongoDB)**
 
-**Nombre del contenedor:** gx\_fe\_gradex  
- **Tecnología:** Next.js (React)
+* **Puerto expuesto: 27018**
 
-**Puerto expuesto:** 3000  
- **Rol:** Cliente Web  
- **Responsabilidad:** Proporciona la interfaz gráfica del sistema GRADEX accesible desde navegadores web para estudiantes, profesores y administradores.
+* **Rol: Base de datos de profesores y asignaturas.**
 
- **6\. GX\_FE\_Gradex\_Desktop (Electron.js)**
+#### **9\. GX\_DB\_Calif (MongoDB)**
 
-**Nombre del contenedor:** GX\_FE\_Gradex\_Desktop  
- **Tecnología:** Electron.js
+* **Puerto expuesto: 27017**
 
-**Puerto expuesto:** 4000  
- **Rol:** Cliente de Escritorio  
- **Responsabilidad:** Interfaz nativa multiplataforma instalada en el dispositivo del usuario final. Permite interacción con el sistema mediante GUI conectándose al API Gateway.
+* **Rol: Base de datos de calificaciones.**
 
- **7\. gx\_api\_gateway (Node.js/Apollo Server)**
+#### **10\. GX\_BE\_Calif (Spring Boot/Java)**
 
-**Nombre del contenedor:** gx\_api\_gateway  
- **Tecnología:** Node.js \+ Apollo Server
+* **Puerto expuesto: 8081**
 
-**Puerto expuesto:** 9000  
- **Rol:** API Gateway  
- **Responsabilidad:** Punto único de entrada al backend. Orquesta peticiones de frontends a microservicios. Expone GraphQL y maneja autenticación, validación y delegación de llamadas.
+* **Rol: Servicio de calificaciones.**
 
- **8\. gx\_be\_comun\_async (Node.js)**
+#### **11\. GX\_BE\_Auth (Golang)**
 
-**Nombre del contenedor:** gx\_be\_comun\_async  
- **Tecnología:** Node.js (Express.js)
+* **Puerto expuesto: 8082**
 
-**Puerto expuesto:** 8081  
- **Rol:** Broker HTTP Asíncrono  
- **Responsabilidad:** Recibe eventos desde RabbitMQ y los retransmite al microservicio gx\_be\_calif por HTTP, facilitando una arquitectura basada en eventos.
+* **Rol: Autenticación y emisión de tokens.**
 
- **9\. gx\_be\_rabbitmq (RabbitMQ)**
+#### **12\. GX\_DB\_Auth (PostgreSQL)**
 
-**Nombre del contenedor:** gx\_be\_rabbitmq  
- **Tecnología:** RabbitMQ
+* **Puerto expuesto: 5432**
 
-**Puerto expuesto:** 5673  
- **Rol:** Sistema de Mensajería Asíncrona  
- **Responsabilidad:** Actúa como cola de mensajes AMQP para desacoplar procesos. Recibe, mantiene y entrega mensajes entre servicios de manera fiable y asincrónica.
+* **Rol: Base de datos de autenticación.**
 
- **10\. GX\_DB\_Auth (PostgreSQL)**
+---
 
-**Nombre del contenedor:** gx\_db\_auth  
- **Tecnología:** PostgreSQL
+### **Nodo de Despliegue (Servidor on-premise)**
 
-**Puerto expuesto:** 5432  
- **Rol:** Base de Datos de Autenticación  
- **Responsabilidad:** Almacena usuarios, credenciales, roles y tokens de sesión relacionados con el servicio de autenticación.
+* **Procesador: Intel Core i5 @ 2.27GHz**
 
- **11\. GX\_DB\_EstCur (PostgreSQL)**
+* **Memoria RAM: 8 GB**
 
-**Nombre del contenedor:** gx\_db\_estcur  
- **Tecnología:** PostgreSQL
+* **Disco SSD: 1 TB**
 
-**Puerto expuesto:** 5433  
- **Rol:** Base de Datos de Estudiantes y Cursos  
- **Responsabilidad:** Persistencia estructurada de la información académica básica como estudiantes y cursos.
+* **Tipo de despliegue: Local, servidor físico**
 
- **12\. GX\_DB\_ProAsig (MongoDB)**
+* **Sistema operativo: GNU/Linux**
 
-**Nombre del contenedor:** gx\_db\_proasig  
- **Tecnología:** MongoDB
+* **Contenedores: Docker y Docker Compose usados para encapsular servicios**
 
-**Puerto expuesto:** 27018  
- **Rol:** Base de Datos de Profesores y Asignaturas  
- **Responsabilidad:** Almacena datos académicos del personal docente y sus materias de forma flexible usando documentos JSON.
 
- **13\. GX\_DB\_Calif (MongoDB)**
-
-**Nombre del contenedor:** gx\_db\_calif  
- **Tecnología:** MongoDB
-
-**Puerto expuesto:** 27019  
- **Rol:** Base de Datos de Calificaciones  
- **Responsabilidad:** Gestión de las calificaciones estudiantiles. Permite un almacenamiento eficiente y escalable de las evaluaciones.
-
- **Nodo de Despliegue (Servidor on-premise)**
-
-* **Procesador:** Intel Core i5 @ 2.27GHz  
-* **Memoria RAM:** 8 GB  
-* **Disco Duro:** 1 TB SSD  
-* **Tipo de Despliegue:** Servidor físico local (on-premise)  
-* **S.O. y Contenedores:** Se asume sistema Linux con servicios desplegados como contenedores Docker
   
 
 ### Decomposition Structure
