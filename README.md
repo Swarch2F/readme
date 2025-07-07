@@ -522,4 +522,4 @@ El proyecto utiliza PostgreSQL para el almacenamiento de datos. Las bases de dat
 - Los servicios GraphQL (Profesores y Asignaturas, Calificaciones) incluyen una interfaz GraphiQL para pruebas
 
 ---
-**© 2025 Swarch2F. GRADEX Prototipo 2** 
+**© 2025 Swarch2F. GRADEX Prototipo 3** 
