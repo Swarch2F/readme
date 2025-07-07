@@ -1,7 +1,9 @@
 # GRADEX - Prototipo 3
 
 
-![image](https://github.com/user-attachments/assets/d511ece6-bccb-4a01-a9cb-1f46cc898cae)
+
+![logo unal](https://github.com/user-attachments/assets/f7a1290c-b60e-4c53-8cc3-bf8df03ff1d6)
+
 
 
 ### 1. **Team** 
