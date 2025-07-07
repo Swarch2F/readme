@@ -181,7 +181,8 @@ Conexión: Comunicación directa TCP/IP con GX_BE_Auth.
 ### Deployment Structure
 #### Deployment View
 
-[![image](https://github.com/user-attachments/assets/633cec07-e2fc-4ae4-9997-2454ad544ef5)](https://github.com/user-attachments/assets/633cec07-e2fc-4ae4-9997-2454ad544ef5)
+![Copy of Diagrama de Despliegue](https://github.com/user-attachments/assets/d1159354-c255-487b-a1c1-e49460d87460)
+
 
 
 
