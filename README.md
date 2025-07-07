@@ -28,7 +28,8 @@
 
 ### Component-and Connector (C&C) Structure
 
-![Copy of Diagrama C C](https://github.com/user-attachments/assets/868c2802-6757-41f6-8c0d-be62d0c1254f)
+![Copy of Diagrama C C](https://github.com/user-attachments/assets/f30b778b-27ed-40d6-999a-5e5e165c3197)
+
 
 
 
