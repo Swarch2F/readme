@@ -408,6 +408,13 @@ A continuación, se describen las tácticas y técnicas implementadas para abord
 #### Applied architectural patterns
 
 
+* **Secure Channel Pattern** es un patrón arquitectónico de seguridad que garantiza la confidencialidad e integridad de los datos transmitidos entre componentes del sistema, mediante el establecimiento de canales de comunicación cifrados. Usa la tactica arquitectonica **Encrypt Data**
+
+* **Reverse Proxy Pattern** es un patrón de seguridad que actúa como intermediario entre clientes y servidores backend, protegiendo la infraestructura al ocultar los servidores internos, filtrar tráfico malicioso (como ataques DDoS o inyecciones SQL), gestionar el cifrado SSL/TLS, y balancear la carga entre instancias para optimizar el rendimiento. Usa la tactica arquitectonica **Limit Access**
+
+* **Network Segmentation Pattern** es un patrón de seguridad que divide la red en segmentos o zonas lógicas (subredes, VLANs, dominios de seguridad) para aislar componentes críticos y limitar el movimiento lateral de amenazas. Usa la tactica arquitectonica **Limit Access**
+
+* **WAF Pattern (Web Application Firewall)** es un patrón de seguridad que implementa un firewall especializado en proteger aplicaciones web al filtrar y monitorear el tráfico HTTP/HTTPS, bloqueando ataques comunes como inyecciones SQL, XSS (Cross-Site Scripting) o solicitudes maliciosas. Usa la tactica arquitectonica **Detect Service Denial**
 
 
 ### Performance and Scalability 
@@ -416,7 +423,13 @@ A continuación, se describen las tácticas y técnicas implementadas para abord
 
 #### Applied architectural tactics
 
+* **Maintain Multiple Copies of Computations** es una táctica de rendimiento y escalabilidad que consiste en ejecutar múltiples instancias redundantes de un mismo componente o servicio (como microservicios o procesos críticos) para distribuir la carga de trabajo y garantizar alta disponibilidad. La táctica mejora la capacidad de respuesta del sistema y se complementa con herramientas como Kubernetes para orquestación automática o bases de datos replicadas (PostgreSQL/MongoDB) para consistencia en los datos.
+
+* **Improve Efficiency** es una táctica arquitectónica de rendimiento y escalabilidad que optimiza el uso de recursos para maximizar la capacidad del sistema y reducir tiempos de respuesta. Se implementa mediante técnicas como caching (almacenar resultados frecuentes en memoria) o pooling de conexiones (reutilizar recursos costosos como conexiones a BD).  Es clave para sistemas con cargas variables o limitaciones de hardware.
+ 
 #### Applied architectural patterns
+
+* **Load Balancer Pattern** es un patrón de rendimiento y escalabilidad que distribuye el tráfico entrante entre múltiples instancias de un servicio para optimizar el uso de recursos, evitar la sobrecarga en nodos individuales y garantizar alta disponibilidad. Esto permite escalar horizontalmente y tolerar fallos, asegurando que picos de tráfico no afecten la capacidad de respuesta del sistema. Usa la tactica arquitectonica **Maintain Multiple Copies of Computations**
 
 #### Performance testing analysis and results
 
