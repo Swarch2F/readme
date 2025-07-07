@@ -2,11 +2,11 @@
 
 
 
-![logo unal](https://github.com/user-attachments/assets/f7a1290c-b60e-4c53-8cc3-bf8df03ff1d6)
+![logo unal](https://github.com/user-attachments/assets/c1925586-3eaa-43e5-9a0e-a25c4a5093aa)
 
 
 
-### 1. **Team** 
+## 1. **Team** 
 - name: 2F  
 - Integrantes: 
     - David Stiven Martinez Triana 
@@ -14,16 +14,16 @@
     - Nestor Steven Piraquive Garzon 
     - Luis Alfonso Pedraos Suarez 
     - Cesar Fabian Rincon Robayo 
-### 2. **Software System** 
+## 2. **Software System** 
 - name: Gradex 
 - Logo:
   
-![image](https://github.com/user-attachments/assets/b3657f68-ea46-4990-8fa8-a0c4b5c26e13)
+![logo gradex](https://github.com/user-attachments/assets/b3657f68-ea46-4990-8fa8-a0c4b5c26e13)
 
 
 - Description: Sistema de Gestión de calificaciones para colegios.
 
-### 3. Architectural Structures
+## 3. Architectural Structures
 
 
 ### Component-and Connector (C&C) Structure
@@ -380,16 +380,50 @@ Contiene todos los contenedores y servicios backend. Se encuentra encapsulada en
 
 * **Crear/Consultar/Eliminar/Modificar**: Operaciones básicas disponibles en distintos módulos del sistema, permitiendo la administración completa de estudiantes, cursos y calificaciones.
 
-## Repositorio del proyecto
+
+
+## 4. Quality Attributes
+
+En la tercera entrega del prototipo se incorporaron diversas tácticas y técnicas orientadas a mejorar la seguridad, el rendimiento y la escalabilidad del sistema. Estas dimensiones son fundamentales para garantizar la confiabilidad, eficiencia y capacidad de crecimiento del software frente a un entorno dinámico y exigente.
+
+A continuación, se describen las tácticas y técnicas implementadas para abordar estos atributos de calidad, así como los resultados obtenidos a partir de las pruebas realizadas de rendimiento y escalabilidad.
+
+### Security
+
+#### Security scenarios
+
+#### Applied architectural tactics
+* **Encrypt data** es una táctica arquitectónica de seguridad que consiste en cifrar la información sensible tanto en tránsito como en reposo. Esto garantiza que, incluso si los datos son interceptados o accedidos de forma no autorizada, no puedan ser leídos sin la clave de descifrado correspondiente. Su implementación protege la confidencialidad de la información crítica, como credenciales de usuarios o datos académicos, y es esencial para cumplir con normativas de protección de datos y prevenir brechas de seguridad.
+
+* **Limit Access** es una táctica arquitectónica de seguridad que restringe el acceso a recursos del sistema únicamente a usuarios o servicios autorizados, siguiendo el principio de mínimo privilegio. . La táctica reduce superficies de ataque al garantizar que cada actor solo pueda interactuar con los componentes y datos estrictamente necesarios para su función, previniendo accesos maliciosos o errores humanos que comprometan la integridad del sistema.
+
+* **Detect Service Denial** es una táctica arquitectónica de seguridad enfocada en identificar y responder ante intentos de denegación de servicio (DoS/DDoS) que buscan afectar la disponibilidad del sistema. Esta táctica permite detectar actividades sospechosas -como intentos de saturación de APIs- y activar contramedidas automáticas (rate limiting, bloqueo de IPs maliciosas) o manuales para mitigar el impacto. En GRADEX, sería clave para proteger endpoints críticos como autenticación (GX_BE_Auth) o consultas masivas de calificaciones (GX_BE_Calif), asegurando que el sistema permanezca accesible para usuarios legítimos.
+
+#### Applied architectural patterns
+
+
+
+
+### Performance and Scalability 
+
+#### Performance scenarios
+
+#### Applied architectural tactics
+
+#### Applied architectural patterns
+
+#### Performance testing analysis and results
+
+## 5. Repositorio del proyecto
 
 Para utilizar el proyecto simplemente clona el repositorio principal, el cual ya incluye todos los submódulos necesarios:
 
 ```bash
-git clone --recursive https://github.com/Swarch2F/prototipo2.git
+git clone --recursive https://github.com/Swarch2F/prototipo3.git
 cd prototipo2
 ```
 
-## Información sobre submódulos (Solo informativo)
+### Información sobre submódulos (Solo informativo)
 
 Los submódulos fueron agregados inicialmente con estos comandos, pero no necesitas ejecutarlos nuevamente:
 
@@ -403,14 +437,14 @@ git submodule add https://github.com/Swarch2F/broker.git components/broker
 git submodule add https://github.com/Swarch2F/api-gateway.git components/api-gateway
 ```
 
-## Actualización de submódulos recursivamente (por primer vez una vez clonado el proyecto):
+### Actualización de submódulos recursivamente (por primer vez una vez clonado el proyecto):
 
 ```bash
 git submodule update --init --recursive
 git submodule update --remote --merge --recursive
 ```
 
-## Levantar el prototipo con Docker Compose
+### Levantar el prototipo con Docker Compose
 
 El proyecto utiliza Docker Compose para gestionar la ejecución de todos los servicios.
 
@@ -430,7 +464,7 @@ que automatiza todo:
 ./start.sh
 ```
 
-## Acceso a servicios
+### Acceso a servicios
 
 Puedes acceder a cada servicio desde tu navegador en las siguientes rutas:
 
@@ -459,7 +493,7 @@ Para volver a ejecutar un contenedor pausado utiliza el siguiente comando:
 docker compose start <nombre del contenedor>
 ```
 
-## Bases de datos
+### Bases de datos
 
 El proyecto utiliza PostgreSQL para el almacenamiento de datos. Las bases de datos se inicializan automáticamente con datos de prueba y se persisten en volúmenes de Docker.
 
@@ -477,7 +511,7 @@ El proyecto utiliza PostgreSQL para el almacenamiento de datos. Las bases de dat
   - Contraseña: postgres
   - Base de datos: gradex_auth
 
-## Notas importantes
+### Notas importantes
 
 - Las credenciales por defecto para RabbitMQ son:
   - Usuario: guest
