@@ -169,32 +169,113 @@ El sistema presenta una separación clara entre el cliente (frontend) y los serv
 #### Layered View:
 ![cesar Copia de Copy of Diagrama C C](https://github.com/user-attachments/assets/5fc98764-773c-499a-a50d-9eeafc757116)
 
+**La arquitectura de GradeX está organizada en cinco capas claramente definidas que separan responsabilidades, maximizan la escalabilidad y facilitan el mantenimiento del sistema. A continuación, se describen cada una de ellas.**
+
+
+### **Capa de Comunicación (Externa)**
+
+**Encargada de recibir y redirigir las solicitudes de los clientes al sistema central:**
+
+* **`gx_nginx_balancer`**  
+   **Servidor NGINX configurado como balanceador de carga. Distribuye el tráfico entrante hacia las distintas instancias frontend disponibles (`gx_fe_gradex_X`).**  
+   **Ofrece soporte para HTTPS, redirección, reintentos y escalabilidad horizontal.**
+
+
+### **Capa de Presentación**
+
+**Interfaz gráfica con la que los usuarios interactúan, accesible desde web y escritorio:**
+
+* **`gx_fe_gradex_1, 2, 3`**  
+   **Aplicaciones web construidas en Next.js \+ React. Cada instancia representa una versión desplegada para balanceo o entornos distintos.**  
+   **Permiten navegación SSR/CSR y consumen el backend vía GraphQL.**
+
+* **`GX_WD_Gradex`**  
+   **Aplicación de escritorio desarrollada con Electron.js. Permite acceso nativo multiplataforma con funcionalidad de gestion de asignaturas similar a la versión web.**
 
 
 
+### **Capa de Comunicación (Interna)**
 
-####  Description:
+**Actúa como middleware entre la presentación y la lógica de negocio:**
 
-  **Capa de Presentación**
-  Permite la interacción del usuario a través de:
-  Web (Next.js) y Escritorio (Electron).
-  Se comunica con el sistema mediante GraphQL hacia el API Gateway.
+* **`gx_nginx_proxy`**  
+   **Otro servidor NGINX, configurado como proxy inverso para enrutar las solicitudes hacia el gateway de GraphQL.**  
+   **Mejora la seguridad y flexibilidad en el enrutamiento interno.**
 
-  **Capa de Comunicación**
-  Gestiona la entrada de solicitudes y coordina servicios.
-  API Gateway (Apollo \+ Express.js) para centralizar peticiones.
-  Broker asíncrono (Express.js) con RabbitMQ para procesamiento de eventos.
+* **`gx_api_gateway`**  
+   **Gateway API centralizado, desarrollado con Express.js \+ Apollo Server.**
 
-  **Capa Lógica**
-  Contiene la lógica de negocio:
-  Autenticación (Go)
-  Gestión académica (Django)
-  Profesores, asignaturas y calificaciones (Spring Boot)
+  * **Unifica las llamadas de los clientes hacia los microservicios.**
 
-  **Capa de Datos**
-  Responsable de persistir la información:
-  PostgreSQL para autenticación y datos académicos generales.
-  MongoDB para profesores, asignaturas y calificaciones.
+  * **Orquestacion de los microservicios.**
+
+
+
+### **Capa Lógica de Negocio**
+
+**Contiene la inteligencia del sistema, dividida en microservicios desacoplados por dominio:**
+
+* **`GX_BE_Auth`**  
+   **Servicio de autenticación y seguridad escrito en Go.**
+
+  * **Generación/validación de tokens JWT**
+
+  * **Registro y login de usuarios**
+
+  * **Manejo de roles y permisos**
+
+* **`GX_BE_EstCur`**  
+   **Microservicio de gestión de estudiantes y cursos, desarrollado con Django (Python).**
+
+  * **Matrículas, historial académico, perfiles**
+
+* **`GX_BE_Calif`**  
+   **Servicio en Spring Boot (Java) dedicado a la gestión de calificaciones.**
+
+  * **Registro, edición y consulta de notas**
+
+* **`GX_BE_ProAsig`**  
+   **Otro microservicio en Spring Boot, enfocado en profesores y asignaturas.**
+
+  * **Carga docente, asignación de materias, datos del profesorado**
+
+* **`gx_be_rabbitmq`**  
+   **Servicio de mensajería basado en RabbitMQ, implementado como microservicio independiente.**
+
+  * **Soporta eventos asincrónicos entre servicios**
+
+  * **Permite desacoplamiento y comunicación reactiva (event-driven)**
+
+
+### **Capa de Persistencia / Datos**
+
+**Responsable de almacenar los datos del sistema. Cada servicio tiene su propia base de datos dedicada:**
+
+* **PostgreSQL**
+
+  * **`GX_DB_Auth`: datos de autenticación (usuarios, contraseñas, tokens).**
+
+  * **`GX_DB_EstCur`: información académica general (alumnos, cursos, matrículas).**
+
+* **MongoDB**
+
+  * **`GX_DB_Calif`: calificaciones de estudiantes.**
+
+  * **`GX_DB_ProAsig`: datos de profesores y asignaturas.**
+
+**El diseño permite independencia por servicio y facilita la aplicación del patrón Database per Service.**
+
+
+
+### **Observaciones Clave**
+
+* **Se usa GraphQL como API unificada para mejorar el control sobre los datos consultados.**
+
+* **El sistema es altamente modular y puede escalar de forma horizontal gracias al balanceador y el proxy.**
+
+* **La mensajería asincrónica con RabbitMQ permite que ciertos procesos no dependan de respuestas inmediatas, mejorando el rendimiento global.**
+
+* **Se sigue el principio separación de responsabilidades en cada capa, facilitando pruebas, mantenimiento y despliegue independiente.**
 
 ### Deployment Structure
 #### Deployment View
