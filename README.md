@@ -31,123 +31,138 @@
 ![Copy of Diagrama C C](https://github.com/user-attachments/assets/f30b778b-27ed-40d6-999a-5e5e165c3197)
 
 
+#### **Description of architectural styles and patterns used**
 
+**Microservicios:**  
+ Los servicios backend (por ejemplo `GX_BE_EstCur` y `GX_BE_ProAsig`) son independientes:
 
-#### **Description of architectural styles and patterns used.**
+* Usan diferentes tecnologías: Django, Spring Boot, Go.
 
+* Se comunican a través de HTTP (REST o GraphQL) con un API Gateway.
 
-**Microservicios**:
-Servicios independientes: por ejemplo GX_BE_EstCur y GX_BE_ProAsig son dos servicios backend autónomos:
-Usan frameworks diferentes (Django y Spring Boot).
-Están desplegados en puertos distintos (8083 y 8080).
-Manejan bases de datos separadas (PostgreSQL y MongoDB respectivamente).
-Se comunican externamente con el api gateway mediante HTTP (REST o GraphQL), y no hay acoplamiento directo entre ellos.
+* Cada uno mantiene su propia base de datos (PostgreSQL o MongoDB).
 
+* No existe acoplamiento directo entre ellos.
 
-**Description of architectural patterns used**:
-*API Gateway Pattern:* Punto único de entrada (Puerto 9000), maneja la orquestación de los microservicios.  Ocultando la complejidad del sistema a los clientes (Next.js/Electrón).
+**Estilo Arquitectónico Cliente-Servidor:**
+El sistema presenta una separación clara entre el cliente (frontend) y los servidores (backends):
+* Cliente: GX_FE_Gradex. Ubicado en la Capa de Presentación. Consume APIs expuestas por los servicios del backend usando HTTPS GraphQL.
+* Servidor: GX_BE_EstCur y GX_BE_ProAsigCal.Ubicados en la Capa de Lógica, se encargan del procesamiento de datos y lógica de negocio.
 
-*Event-driven architecture:* Implementado por: gx_be_comun_async y gx_be_rabbitmq, Comunicación basada en eventos asíncronos a través de RabbitMQ. Permitiendo desacoplar procesos que no necesitan respuesta inmediata.
+**Patrones utilizados:**
 
-*Database per Service:* Cada microservicio tiene su propia base de datos dedicada, en lugar de compartir una base de datos centralizada. Esto promueve la independencia, el aislamiento y la escalabilidad de los microservicios. 
-			
-**Description of architectural elements and relations:**
+* **API Gateway Pattern**: Punto único de entrada (`gx_api_gateway`) gestionado por NGINX (`gx_nginx_proxy`), ocultando la complejidad del backend a los clientes frontend y Electron.
 
-Descripción de Componentes:
+* **Event-driven architecture**: `gx_be_calif` interactúa directamente con `gx_be_rabbitmq` mediante AMQP.
 
-**GX_FE_Gradex (Frontend Web)**
-Función: Interfaz gráfica para usuarios finales vía navegador web.
-Tecnología: Next.js (React)
-Propósito: Permite a los usuarios la gestión de calificaciones (estudiantes, profesores, asignaturas, cursos) para colegios.
-Conexión: Se comunica con gx_api_gateway a través de HTTP utilizando GraphQL.
+* **Database per Service**: Cada microservicio tiene su propia base de datos dedicada.
 
-**GX_WD_Gradex (Aplicación de Escritorio)**
-Función: Interfaz gráfica instalada localmente para windows en el dispositivo del usuario.
-Tecnología: Electron.js
-Propósito: Ofrecer la gestión de asignaturas para los usuarios finales.
-Conexión: Igual que el frontend web, se comunica con gx_api_gateway mediante HTTP/GraphQL.
+* **Load Balancing Frontend**: Uso de `gx_nginx_balancer` para distribuir tráfico entre múltiples instancias frontend (`gx_fe_gradex_1`, `2`, `3`).
 
-**gx_api_gateway (API Gateway)**
-Función: Punto único de entrada al sistema backend.
-Tecnología: Node.js (Express.js) + Apollo Server (GraphQL)
-Propósito: Orquestar microservicios y centralizar todas las solicitudes externas. Expone GraphQL hacia los frontends y resuelve consultas delegándolas a los microservicios internos.
-Conexión: HTTP (REST o GraphQL) a todos los microservicios.
+---
 
-**gx_be_comun_async (Broker HTTP Asíncrono)**
-Función: gestionar flujos de eventos asíncronos.
-Tecnología: Node.js (Express.js)
-Propósito: Recibe eventos desde RabbitMQ y los reenvía al microservicio gx_be_calif por HTTP.
-Conexión: AMQP (con gx_be_rabbitmq) + HTTP REST con  gx_be_calif.
+#### **Description of architectural elements and relations**
 
-**gx_be_rabbitmq (Broker de Mensajes)**
-Función: Sistema de mensajería asíncrona.
-Tecnología: RabbitMQ
-Propósito: realizar la cola de mensajes de las peticiones realizadas para el microservicio de gx_be_calif.
-Conexión: Protocolo AMQP con gx_be_comun_async.
+**gx\_nginx\_balancer**
 
-**GX_BE_EstCur (Microservicio de estudiantes y cursos)**
-Función: Gestionar información de estudiantes y cursos.
-Tecnología: Django (Python)
-Conexión: HTTP REST con el API Gateway. TCP/IP con base de datos PostgreSQL.
+* Función: Balanceador de carga HTTPS hacia frontends.
 
-**GX_BE_ProAsig (Microservicio de Profesores y Asignaturas)**
-Función: Gestión académica de profesores y asignaturas.
-Tecnología: Spring Boot (Java)
-Propósito: Encargado de la administración del personal docente y sus materias asignadas.
-Conexión: HTTP GraphQL con el API Gateway. TCP/IP con MongoDB.
+* Tecnología: NGINX
 
-**GX_BE_Calif (Microservicio de Calificaciones)**
-Función: Administración de las calificaciones de los estudiantes.
-Tecnología: Spring Boot (Java)
-Propósito: Permite consultar, actualizar y almacenar calificaciones académicas.
-Conexión: HTTP GraphQL con el API Gateway. TCP/IP con MongoDB.
+* Propósito: Distribuir peticiones entrantes entre instancias React/Next.js.
 
-**GX_DB_EstCur (Base de Datos del Microservicio de estudiantes/cursos)**
-Función: Persistencia de datos relacionados a cursos y estudiantes.
-Tecnología: PostgreSQL
-Propósito: Base de datos relacional que asegura integridad de datos de estudiantes y cursos.
+**gx\_fe\_gradex\_1, gx\_fe\_gradex\_2, gx\_fe\_gradex\_3**
 
-**GX_DB_ProAsig (Base de Datos del Microservicio Profesores/Asignaturas)**
-Función: Persistencia de datos para profesores y asignaturas.
-Tecnología: MongoDB
-Propósito: Base de datos NoSQL flexible para almacenar documentos relacionados a materias y docentes.
+* Tecnología: React \+ Next.js
 
-**GX_DB_Calif (Base de Datos del Microservicio de Calificaciones)**
-Función: Persistencia de calificaciones estudiantiles.
-Tecnología: MongoDB
-Propósito: Almacena las notas de los estudiantes de forma flexible y escalable.
+* Función: Frontend web de usuarios finales.
 
-**GX_BE_Auth (Microservicio de Autenticación)**
-Función: Gestionar la autenticación, registro de usuarios y emisión de tokens (JWT).
-Tecnología: Go
-Propósito: Encargado de validar credenciales, gestionar sesiones, emisión de tokens de acceso y registro de usuario.
-Conexión:HTTP REST con el gx_api_gateway (para exponer el login, registro, etc.)
-TCP/IP con su base de datos PostgreSQL.
+* Comunicación: HTTPS \+ GraphQL hacia `gx_nginx_proxy`.
 
-**GX_DB_Auth (Base de Datos del microservicio de autenticación)**
-Función: Almacenar credenciales, usuarios, roles, etc.
-Tecnología: PostgreSQL
-Propósito: Persistencia segura de la información relacionada con la autenticación.
-Conexión: Comunicación directa TCP/IP con GX_BE_Auth.
+**GX\_WD\_Gradex (Desktop App)**
 
+* Tecnología: Electron.js
 
-#### Descripción de Conectores:
+* Función: Interfaz de escritorio local.
 
-| Origen | Destino | Protocolo | Puerto | Propósito / Descripción |
-| :---- | :---- | :---- | :---- | :---- |
-| GX\_FE\_Gradex | gx\_api\_gateway | HTTP (GraphQL) | 9000 | Comunicación del frontend web con el API Gateway. |
-| GX\_WD\_Gradex | gx\_api\_gateway | HTTP (GraphQL) | 9000 | Comunicación del frontend de escritorio con backend. |
-| gx\_api\_gateway | GX\_BE\_Auth | HTTP (REST) | 8082 | Autenticación de usuarios. |
-| gx\_api\_gateway | GX\_BE\_EstCur | HTTP (REST) | 8083 | Gestión de estudiantes y cursos. |
-| gx\_api\_gateway | GX\_BE\_ProAsig | HTTP (GraphQL) | 8080 | Gestión de profesores y asignaturas. |
-| gx\_api\_gateway | GX\_BE\_Calif | HTTP (GraphQL) | 8081 | Gestión de calificaciones académicas. |
-| gx\_api\_gateway | gx\_be\_comun\_async | HTTP (REST) | 8081 | Manejo de eventos asíncronos. |
-| gx\_be\_comun\_async | gx\_be\_rabbitmq | AMQP | 5673 | Publicación y consumo de eventos. |
-| GX\_BE\_EstCur | GX\_DB\_EstCur | TCP/IP | 5433 | Persistencia de datos estudiantes y cursos. |
-| GX\_BE\_ProAsig | GX\_DB\_ProAsig | TCP/IP | 27018 | Persistencia de datos de profesores y asignaturas. |
-| GX\_BE\_Calif | GX\_DB\_Calif | TCP/IP | 27019 | Persistencia de calificaciones. |
-| GX\_BE\_Auth | GX\_DB\_Auth | TCP/IP | 5432 | Persistencia de datos de usuarios y credenciales. |
+* Comunicación: HTTPS \+ GraphQL hacia `gx_nginx_proxy`.
 
+**gx\_nginx\_proxy**
+
+* Función: Reverso proxy que expone el API Gateway.
+
+* Tecnología: NGINX
+
+* Comunicación: HTTP GraphQL hacia `gx_api_gateway`.
+
+**gx\_api\_gateway**
+
+* Tecnología: Express.js \+ Apollo Server
+
+* Función: API Gateway para orquestar microservicios.
+
+* Comunicación: HTTP REST y GraphQL con todos los microservicios.
+
+**gx\_be\_rabbitmq**
+
+* Tecnología: RabbitMQ
+
+* Función: Sistema de mensajería asíncrona.
+
+* Comunicación: AMQP con `GX_BE_Calif`.
+
+**GX\_BE\_Auth**
+
+* Tecnología: Go
+
+* Función: Autenticación y emisión de JWT
+
+* DB: PostgreSQL (`GX_DB_Auth`) vía lib pgx.
+
+**GX\_BE\_EstCur**
+
+* Tecnología: Django
+
+* Función: Gestión de estudiantes y cursos
+
+* DB: PostgreSQL (`GX_DB_EstCur`) vía ORM de Django.
+
+**GX\_BE\_ProAsig**
+
+* Tecnología: Spring Boot
+
+* Función: Gestión de profesores y asignaturas
+
+* DB: MongoDB (`GX_DB_ProAsig`) con Spring Data.
+
+**GX\_BE\_Calif**
+
+* Tecnología: Spring Boot
+
+* Función: Gestión de calificaciones
+
+* DB: MongoDB (`GX_DB_Calif`)
+
+* Comunicación: HTTP GraphQL con API Gateway y AMQP con RabbitMQ.
+
+🔌 **Conectores (Puertos y protocolos)**
+
+| Origen | Destino | Protocolo | Puerto | Observaciones |
+| ----- | ----- | ----- | ----- | ----- |
+| **`gx_nginx_balancer`** | **`gx_fe_gradex`** | **HTTPS** | **3000** | **Balanceo hacia frontend Next.js** |
+| **`gx_nginx_balancer`** | **Usuario externo** | **HTTPS** | **443 / 80** | **Entrada desde navegador** |
+| **`gx_fe_gradex`** | **`gx_nginx_proxy`** | **HTTPS** | **444** | **Proxy reverso para GraphQL** |
+| **`GX_WD_Gradex`** | **`gx_nginx_proxy`** | **HTTPS** | **444** | **Conexión desde app de escritorio** |
+| **`gx_nginx_proxy`** | **`gx_api_gateway`** | **HTTP GraphQL** | **4000** | **Entrada única a microservicios** |
+| **`gx_api_gateway`** | **`GX_BE_Auth`** | **HTTP REST** | **8082** | **Servicio de autenticación** |
+| **`gx_api_gateway`** | **`GX_BE_EstCur`** | **HTTP REST** | **8000** | **Estudiantes y cursos** |
+| **`gx_api_gateway`** | **`GX_BE_ProAsig`** | **HTTP GraphQL** | **8080** | **Profesores y asignaturas** |
+| **`gx_api_gateway`** | **`GX_BE_Calif`** | **HTTP GraphQL** | **8081** | **Calificaciones** |
+| **`GX_BE_Calif`** | **`gx_be_rabbitmq`** | **AMQP** | **5672 / 5673** | **Eventos asincrónicos** |
+| **`GX_BE_Auth`** | **`GX_DB_Auth`** | **TCP/IP** | **5432** | **PostgreSQL** |
+| **`GX_BE_EstCur`** | **`GX_DB_EstCur`** | **TCP/IP** | **5433** | **PostgreSQL** |
+| **`GX_BE_ProAsig`** | **`GX_DB_ProAsig`** | **TCP/IP** | **27018** | **MongoDB** |
+| **`GX_BE_Calif`** | **`GX_DB_Calif`** | **TCP/IP** | **27017** | **MongoDB** |
 
 
 ### Layered Structure
@@ -439,7 +454,7 @@ Para utilizar el proyecto simplemente clona el repositorio principal, el cual ya
 
 ```bash
 git clone --recursive https://github.com/Swarch2F/prototipo3.git
-cd prototipo2
+cd prototipo3
 ```
 
 ### Información sobre submódulos (Solo informativo)
