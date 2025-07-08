@@ -511,6 +511,13 @@ A continuación, se describen las tácticas y técnicas implementadas para abord
 * **Cache-Aside Pattern** (también llamado Lazy Loading) es un patrón de rendimiento que mejora la escalabilidad al almacenar temporalmente datos frecuentemente consultados en una capa de caché rápida. Cuando el sistema recibe una solicitud, primero verifica si los datos están en caché; si no existen o están expirados, los consulta de la base de datos principal, los almacena en caché y luego los devuelve. Esto acelera los tiempos de respuesta para consultas repetitivas. **MImprove Efficiency**
 
 #### Performance testing analysis and results
+![WhatsApp Image 2025-07-07 at 11 49 05 PM](https://github.com/user-attachments/assets/7f31cb7a-96fe-4eae-9d1f-3ae916bfa2ac)
+
+<br>
+
+![WhatsApp Image 2025-07-07 at 11 48 02 PM](https://github.com/user-attachments/assets/c41077dc-d797-4774-bbf0-22e1d59f6d23)
+
+
 
 ## 5. Repositorio del proyecto
 
