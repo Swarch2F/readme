@@ -554,5 +554,6 @@ Una vez clonado el proyecto, ejecuta:
 docker compose up --build
 ```
 
+Para descargar la aplicacion de escritorio, puedes descargarlo de: https://drive.google.com/drive/folders/1sZOGRAUARZDUAfDL4Kh2wrnzubOO6FbK?usp=sharing
 ---
 **© 2025 Swarch2F. GRADEX Prototipo 3** 
