@@ -508,6 +508,8 @@ A continuación, se describen las tácticas y técnicas implementadas para abord
 
 * **Load Balancer Pattern** es un patrón de rendimiento y escalabilidad que distribuye el tráfico entrante entre múltiples instancias de un servicio para optimizar el uso de recursos, evitar la sobrecarga en nodos individuales y garantizar alta disponibilidad. Esto permite escalar horizontalmente y tolerar fallos, asegurando que picos de tráfico no afecten la capacidad de respuesta del sistema. Usa la tactica arquitectonica **Maintain Multiple Copies of Computations**
 
+* **Cache-Aside Pattern** (también llamado Lazy Loading) es un patrón de rendimiento que mejora la escalabilidad al almacenar temporalmente datos frecuentemente consultados en una capa de caché rápida. Cuando el sistema recibe una solicitud, primero verifica si los datos están en caché; si no existen o están expirados, los consulta de la base de datos principal, los almacena en caché y luego los devuelve. Esto acelera los tiempos de respuesta para consultas repetitivas. **MImprove Efficiency**
+
 #### Performance testing analysis and results
 
 ## 5. Repositorio del proyecto
