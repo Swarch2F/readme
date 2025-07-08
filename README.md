@@ -476,6 +476,21 @@ A continuación, se describen las tácticas y técnicas implementadas para abord
 ### Performance and Scalability 
 
 #### Performance scenarios
+![Escenarios Seguridad y rendimiento - secure channel](https://github.com/user-attachments/assets/31255905-333a-44d7-929d-1f2e269742d2)
+
+<br>
+
+![Escenarios Seguridad y rendimiento - Reverse Proxy Pattern](https://github.com/user-attachments/assets/b474797a-8b69-475c-bc79-37bfc267c833)
+
+<br>
+
+![Escenarios Seguridad y rendimiento - Network Segmentation Pattern](https://github.com/user-attachments/assets/1dc0c29a-83b4-4da4-bae1-6ff34e5007bb)
+
+<br>
+
+![Escenarios Seguridad y rendimiento - WAF](https://github.com/user-attachments/assets/f503bb21-45ec-4ca8-a557-057f98a2c359)
+
+
 
 #### Applied architectural tactics
 
