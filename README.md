@@ -454,28 +454,6 @@ A continuación, se describen las tácticas y técnicas implementadas para abord
 
 #### Security scenarios
 
-#### Applied architectural tactics
-* **Encrypt data** es una táctica arquitectónica de seguridad que consiste en cifrar la información sensible tanto en tránsito como en reposo. Esto garantiza que, incluso si los datos son interceptados o accedidos de forma no autorizada, no puedan ser leídos sin la clave de descifrado correspondiente. Su implementación protege la confidencialidad de la información crítica, como credenciales de usuarios o datos académicos, y es esencial para cumplir con normativas de protección de datos y prevenir brechas de seguridad.
-
-* **Limit Access** es una táctica arquitectónica de seguridad que restringe el acceso a recursos del sistema únicamente a usuarios o servicios autorizados, siguiendo el principio de mínimo privilegio. . La táctica reduce superficies de ataque al garantizar que cada actor solo pueda interactuar con los componentes y datos estrictamente necesarios para su función, previniendo accesos maliciosos o errores humanos que comprometan la integridad del sistema.
-
-* **Detect Service Denial** es una táctica arquitectónica de seguridad enfocada en identificar y responder ante intentos de denegación de servicio (DoS/DDoS) que buscan afectar la disponibilidad del sistema. Esta táctica permite detectar actividades sospechosas -como intentos de saturación de APIs- y activar contramedidas automáticas (rate limiting, bloqueo de IPs maliciosas) o manuales para mitigar el impacto. En GRADEX, sería clave para proteger endpoints críticos como autenticación (GX_BE_Auth) o consultas masivas de calificaciones (GX_BE_Calif), asegurando que el sistema permanezca accesible para usuarios legítimos.
-
-#### Applied architectural patterns
-
-
-* **Secure Channel Pattern** es un patrón arquitectónico de seguridad que garantiza la confidencialidad e integridad de los datos transmitidos entre componentes del sistema, mediante el establecimiento de canales de comunicación cifrados. Usa la tactica arquitectonica **Encrypt Data**
-
-* **Reverse Proxy Pattern** es un patrón de seguridad que actúa como intermediario entre clientes y servidores backend, protegiendo la infraestructura al ocultar los servidores internos, filtrar tráfico malicioso (como ataques DDoS o inyecciones SQL), gestionar el cifrado SSL/TLS, y balancear la carga entre instancias para optimizar el rendimiento. Usa la tactica arquitectonica **Limit Access**
-
-* **Network Segmentation Pattern** es un patrón de seguridad que divide la red en segmentos o zonas lógicas (subredes, VLANs, dominios de seguridad) para aislar componentes críticos y limitar el movimiento lateral de amenazas. Usa la tactica arquitectonica **Limit Access**
-
-* **WAF Pattern (Web Application Firewall)** es un patrón de seguridad que implementa un firewall especializado en proteger aplicaciones web al filtrar y monitorear el tráfico HTTP/HTTPS, bloqueando ataques comunes como inyecciones SQL, XSS (Cross-Site Scripting) o solicitudes maliciosas. Usa la tactica arquitectonica **Detect Service Denial**
-
-
-### Performance and Scalability 
-
-#### Performance scenarios
 ![Escenarios Seguridad y rendimiento - secure channel](https://github.com/user-attachments/assets/31255905-333a-44d7-929d-1f2e269742d2)
 
 <br>
@@ -491,6 +469,34 @@ A continuación, se describen las tácticas y técnicas implementadas para abord
 ![Escenarios Seguridad y rendimiento - WAF](https://github.com/user-attachments/assets/f503bb21-45ec-4ca8-a557-057f98a2c359)
 
 
+#### Applied architectural tactics
+* **Encrypt data** es una táctica arquitectónica de seguridad que consiste en cifrar la información sensible tanto en tránsito como en reposo. Esto garantiza que, incluso si los datos son interceptados o accedidos de forma no autorizada, no puedan ser leídos sin la clave de descifrado correspondiente. Su implementación protege la confidencialidad de la información crítica, como credenciales de usuarios o datos académicos, y es esencial para cumplir con normativas de protección de datos y prevenir brechas de seguridad.
+
+* **Limit Access** es una táctica arquitectónica de seguridad que restringe el acceso a recursos del sistema únicamente a usuarios o servicios autorizados, siguiendo el principio de mínimo privilegio. . La táctica reduce superficies de ataque al garantizar que cada actor solo pueda interactuar con los componentes y datos estrictamente necesarios para su función, previniendo accesos maliciosos o errores humanos que comprometan la integridad del sistema.
+
+* **Detect Service Denial** es una táctica arquitectónica de seguridad enfocada en identificar y responder ante intentos de denegación de servicio (DoS/DDoS) que buscan afectar la disponibilidad del sistema. Esta táctica permite detectar actividades sospechosas -como intentos de saturación de APIs- y activar contramedidas automáticas (rate limiting, bloqueo de IPs maliciosas) o manuales para mitigar el impacto. En GRADEX, sería clave para proteger endpoints críticos como autenticación (GX_BE_Auth) o consultas masivas de calificaciones (GX_BE_Calif), asegurando que el sistema permanezca accesible para usuarios legítimos.
+
+#### Applied architectural patterns
+
+* **Secure Channel Pattern** es un patrón arquitectónico de seguridad que garantiza la confidencialidad e integridad de los datos transmitidos entre componentes del sistema, mediante el establecimiento de canales de comunicación cifrados. Usa la tactica arquitectonica **Encrypt Data**
+
+* **Reverse Proxy Pattern** es un patrón de seguridad que actúa como intermediario entre clientes y servidores backend, protegiendo la infraestructura al ocultar los servidores internos, filtrar tráfico malicioso (como ataques DDoS o inyecciones SQL), gestionar el cifrado SSL/TLS, y balancear la carga entre instancias para optimizar el rendimiento. Usa la tactica arquitectonica **Limit Access**
+
+* **Network Segmentation Pattern** es un patrón de seguridad que divide la red en segmentos o zonas lógicas (subredes, VLANs, dominios de seguridad) para aislar componentes críticos y limitar el movimiento lateral de amenazas. Usa la tactica arquitectonica **Limit Access**
+
+* **WAF Pattern (Web Application Firewall)** es un patrón de seguridad que implementa un firewall especializado en proteger aplicaciones web al filtrar y monitorear el tráfico HTTP/HTTPS, bloqueando ataques comunes como inyecciones SQL, XSS (Cross-Site Scripting) o solicitudes maliciosas. Usa la tactica arquitectonica **Detect Service Denial**
+
+
+### Performance and Scalability 
+
+#### Performance scenarios
+![Escenarios Seguridad y rendimiento - Load Balancer Pattern](https://github.com/user-attachments/assets/ea16c0ec-61da-4ab6-930d-04f73e1b7254)
+
+<br>
+
+![Escenarios Seguridad y rendimiento - Cache-Aside Pattern](https://github.com/user-attachments/assets/5677d28d-f19c-413d-bfef-6704529c53af)
+
+<br>
 
 #### Applied architectural tactics
 
