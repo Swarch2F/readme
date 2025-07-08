@@ -545,6 +545,7 @@ git submodule update --remote --merge --recursive
 ### Levantar el prototipo con Docker Compose
 
 El proyecto utiliza Docker Compose para gestionar la ejecución de todos los servicios.
+Para descargar la aplicacion de escritorio, puedes descargarlo de: https://drive.google.com/drive/folders/1sZOGRAUARZDUAfDL4Kh2wrnzubOO6FbK?usp=sharing
 
 ### Ejecución rápida
 
@@ -554,6 +555,5 @@ Una vez clonado el proyecto, ejecuta:
 docker compose up --build
 ```
 
-Para descargar la aplicacion de escritorio, puedes descargarlo de: https://drive.google.com/drive/folders/1sZOGRAUARZDUAfDL4Kh2wrnzubOO6FbK?usp=sharing
 ---
 **© 2025 Swarch2F. GRADEX Prototipo 3** 
