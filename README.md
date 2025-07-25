@@ -522,7 +522,7 @@ A continuación, se describen las tácticas y técnicas implementadas para abord
 
 <img width="682" height="570" alt="image" src="https://github.com/user-attachments/assets/5b007a07-645b-4f74-b1fd-c054539315fb" />
 
-###  Descripción general
+####  Descripción general
 
 Estas pruebas evalúan el rendimiento de nuestro proyecto bajo carga de usuarios concurrentes, considerando dos escenarios distintos:
 
@@ -533,7 +533,7 @@ Aunque el patrón de redundancia busca mejorar la disponibilidad y tolerancia a 
 
 
 
-### Análisis de la gráfica (Curva de rodilla)
+#### Análisis de la gráfica (Curva de rodilla)
 
 El tiempo de respuesta (en ms) aumenta conforme crece el número de usuarios concurrentes:
 
@@ -544,7 +544,7 @@ El tiempo de respuesta (en ms) aumenta conforme crece el número de usuarios con
 Este punto marca el límite a partir del cual el sistema deja de escalar eficientemente.
 
 
-### Comparación de resultados
+#### Comparación de resultados
 
 #### Escenario #1 (Sin Redundancia)
 | Usuarios | Tiempo de Respuesta (ms) | Throughput (trans/min) |
@@ -567,7 +567,7 @@ Este punto marca el límite a partir del cual el sistema deja de escalar eficien
 | 1000     | 4075                      | 11822,7                  |
 
 
-###  Observaciones
+####  Observaciones
 
 - **El Escenario #2 supera ligeramente al Escenario #1** tanto en tiempo de respuesta como en throughput, especialmente con mayor carga.
 - El **patrón de Redundancia Pasiva no penaliza el rendimiento**, y en muchos casos lo mejora.
@@ -575,7 +575,7 @@ Este punto marca el límite a partir del cual el sistema deja de escalar eficien
 
 
 
-###  Conclusiones
+####  Conclusiones
 
 - **El Escenario #2** (con redundancia) es más adecuado para producción gracias a:
   - Mayor throughput bajo carga.
@@ -601,6 +601,35 @@ Este punto marca el límite a partir del cual el sistema deja de escalar eficien
 <br>
 
 ![Escenarios Seguridad y rendimiento - Passive Replication Pattern](https://github.com/user-attachments/assets/29cf2c21-0501-4bfc-95c8-f4f92cdf9181)
+
+
+#### Applied architectural tactics
+
+#### Redundant Spare:
+Esta táctica mantiene componentes de respaldo listos para activarse ante fallos en los elementos principales. En GRADEX, se implementa con instancias pasivas (como en el servicio de autenticación) que permanecen sincronizadas y toman el control inmediatamente cuando el sistema detecta una falla. Esto garantiza continuidad del servicio sin intervención manual, ideal para módulos críticos donde la disponibilidad es prioritaria.
+
+#### Reconfiguration (Reconfiguración):
+Esta táctica permite al sistema modificar dinámicamente su estructura o parámetros operativos para adaptarse a fallos, cambios de carga o mantenimiento planificado. En GRADEX, se manifiesta mediante el rebalanceo automático de tráfico al detectar nodos caídos, el ajuste de políticas de reintento para conexiones a bases de datos, o la redistribución de pods en GKE durante actualizaciones. A diferencia de simplemente activar repuestos, esta táctica implica inteligencia operativa para reajustar el sistema en tiempo real, optimizando recursos existentes mientras se mantienen los SLA de disponibilidad y rendimiento.
+
+
+#### Applied architectural patterns
+
+##### Replication Pattern:
+Este patrón mejora la confiabilidad mediante la duplicación de instancias de servicios o datos en múltiples nodos. En GRADEX, se aplica al frontend y servicios críticos, permitiendo que el sistema continúe operando incluso si falla una instancia, ya que las solicitudes se redirigen automáticamente a las réplicas disponibles. Esto garantiza alta disponibilidad y tolerancia a fallos durante picos de tráfico o actualizaciones.
+
+##### Cluster Pattern:
+Organiza los servicios en un grupo de nodos (cluster) gestionado por Kubernetes (GKE), donde los recursos se distribuyen y escalan automáticamente. En GRADEX, este patrón asegura que los microservicios (como autenticación o gestión de cursos) se reinicien o reubiquen en nodos sanos ante fallos, manteniendo la operación continua sin intervención manual.
+
+##### Passive Replication Pattern:
+Mantiene una instancia secundaria en espera ("passive") para servicios críticos (ej: autenticación). En GRADEX, si la instancia principal falla, el sistema activa la réplica sincronizada, minimizando el tiempo de inactividad. Ideal para componentes donde la consistencia de datos es prioritaria, como el módulo de calificaciones.
+
+##### Service Discovery Pattern:
+En entornos dinámicos como GKE, este patrón permite que los servicios se localicen y comuniquen entre sí automáticamente, incluso al escalar o reemplazar instancias. GRADEX lo usa para gestionar la conexión entre frontend y backends, asegurando que las solicitudes siempre encuentren los endpoints correctos sin configuraciones estáticas.
+
+##### Cache-Aside Pattern:
+Aunque enfocado en rendimiento, también mejora confiabilidad al reducir la dependencia de fuentes de datos primarias. En GRADEX, cachear consultas frecuentes (ej: listados de cursos) en Redis evita saturar la base de datos durante fallos temporales, permitiendo que el sistema responda con datos cacheados mientras se recupera el servicio principal.
+
+
 
 
 
