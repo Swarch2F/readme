@@ -605,32 +605,20 @@ Este punto marca el límite a partir del cual el sistema deja de escalar eficien
 
 #### Applied architectural tactics
 
-#### Redundant Spare:
-Esta táctica mantiene componentes de respaldo listos para activarse ante fallos en los elementos principales. En GRADEX, se implementa con instancias pasivas (como en el servicio de autenticación) que permanecen sincronizadas y toman el control inmediatamente cuando el sistema detecta una falla. Esto garantiza continuidad del servicio sin intervención manual, ideal para módulos críticos donde la disponibilidad es prioritaria.
+*Redundant Spare*: Esta táctica mantiene componentes de respaldo listos para activarse ante fallos en los elementos principales. En GRADEX, se implementa con instancias pasivas (como en el servicio de autenticación) que permanecen sincronizadas y toman el control inmediatamente cuando el sistema detecta una falla. Esto garantiza continuidad del servicio sin intervención manual, ideal para módulos críticos donde la disponibilidad es prioritaria.
 
-#### Reconfiguration (Reconfiguración):
-Esta táctica permite al sistema modificar dinámicamente su estructura o parámetros operativos para adaptarse a fallos, cambios de carga o mantenimiento planificado. En GRADEX, se manifiesta mediante el rebalanceo automático de tráfico al detectar nodos caídos, el ajuste de políticas de reintento para conexiones a bases de datos, o la redistribución de pods en GKE durante actualizaciones. A diferencia de simplemente activar repuestos, esta táctica implica inteligencia operativa para reajustar el sistema en tiempo real, optimizando recursos existentes mientras se mantienen los SLA de disponibilidad y rendimiento.
+*Reconfiguration*: Esta táctica permite al sistema modificar dinámicamente su estructura o parámetros operativos para adaptarse a fallos, cambios de carga o mantenimiento planificado. En GRADEX, se manifiesta mediante el rebalanceo automático de tráfico al detectar nodos caídos, el ajuste de políticas de reintento para conexiones a bases de datos, o la redistribución de pods en GKE durante actualizaciones. A diferencia de simplemente activar repuestos, esta táctica implica inteligencia operativa para reajustar el sistema en tiempo real, optimizando recursos existentes mientras se mantienen los SLA de disponibilidad y rendimiento.
 
 
 #### Applied architectural patterns
 
-##### Replication Pattern:
-Este patrón mejora la confiabilidad mediante la duplicación de instancias de servicios o datos en múltiples nodos. En GRADEX, se aplica al frontend y servicios críticos, permitiendo que el sistema continúe operando incluso si falla una instancia, ya que las solicitudes se redirigen automáticamente a las réplicas disponibles. Esto garantiza alta disponibilidad y tolerancia a fallos durante picos de tráfico o actualizaciones.
+*Replication Pattern*: Este patrón mejora la confiabilidad mediante la duplicación de instancias de servicios o datos en múltiples nodos. En GRADEX, se aplica al frontend y servicios críticos, permitiendo que el sistema continúe operando incluso si falla una instancia, ya que las solicitudes se redirigen automáticamente a las réplicas disponibles. Esto garantiza alta disponibilidad y tolerancia a fallos durante picos de tráfico o actualizaciones.
 
-##### Cluster Pattern:
-Organiza los servicios en un grupo de nodos (cluster) gestionado por Kubernetes (GKE), donde los recursos se distribuyen y escalan automáticamente. En GRADEX, este patrón asegura que los microservicios (como autenticación o gestión de cursos) se reinicien o reubiquen en nodos sanos ante fallos, manteniendo la operación continua sin intervención manual.
+*Cluster Pattern*: Organiza los servicios en un grupo de nodos (cluster) gestionado por Kubernetes (GKE), donde los recursos se distribuyen y escalan automáticamente. En GRADEX, este patrón asegura que los microservicios (como autenticación o gestión de cursos) se reinicien o reubiquen en nodos sanos ante fallos, manteniendo la operación continua sin intervención manual.
 
-##### Passive Replication Pattern:
-Mantiene una instancia secundaria en espera ("passive") para servicios críticos (ej: autenticación). En GRADEX, si la instancia principal falla, el sistema activa la réplica sincronizada, minimizando el tiempo de inactividad. Ideal para componentes donde la consistencia de datos es prioritaria, como el módulo de calificaciones.
+*Passive Replication Pattern*: Mantiene una instancia secundaria en espera ("passive") para servicios críticos (ej: autenticación). En GRADEX, si la instancia principal falla, el sistema activa la réplica sincronizada, minimizando el tiempo de inactividad. Ideal para componentes donde la consistencia de datos es prioritaria, como el módulo de calificaciones.
 
-##### Service Discovery Pattern:
-En entornos dinámicos como GKE, este patrón permite que los servicios se localicen y comuniquen entre sí automáticamente, incluso al escalar o reemplazar instancias. GRADEX lo usa para gestionar la conexión entre frontend y backends, asegurando que las solicitudes siempre encuentren los endpoints correctos sin configuraciones estáticas.
-
-##### Cache-Aside Pattern:
-Aunque enfocado en rendimiento, también mejora confiabilidad al reducir la dependencia de fuentes de datos primarias. En GRADEX, cachear consultas frecuentes (ej: listados de cursos) en Redis evita saturar la base de datos durante fallos temporales, permitiendo que el sistema responda con datos cacheados mientras se recupera el servicio principal.
-
-
-
+*Service Discovery Pattern*: En entornos dinámicos como GKE, este patrón permite que los servicios se localicen y comuniquen entre sí automáticamente, incluso al escalar o reemplazar instancias. GRADEX lo usa para gestionar la conexión entre frontend y backends, asegurando que las solicitudes siempre encuentren los endpoints correctos sin configuraciones estáticas.
 
 
 
