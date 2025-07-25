@@ -170,7 +170,8 @@ El sistema presenta una separación clara entre el cliente (frontend) y los serv
 
 ### Layered Structure
 #### Layered View:
-![cesar Copia de Copy of Diagrama C C](https://github.com/user-attachments/assets/5fc98764-773c-499a-a50d-9eeafc757116)
+<img width="4169" height="5160" alt="cesar Copia de Copy of Diagrama C C" src="https://github.com/user-attachments/assets/34f87f8e-ac37-4ec5-877b-3659f7776c37" />
+
 
 **La arquitectura de GradeX está organizada en cinco capas claramente definidas que separan responsabilidades, maximizan la escalabilidad y facilitan el mantenimiento del sistema. A continuación, se describen cada una de ellas.**
 
