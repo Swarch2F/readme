@@ -1,4 +1,4 @@
-# GRADEX - Prototipo 3
+# GRADEX - Prototipo 4
 
 
 
@@ -524,11 +524,12 @@ A continuación, se describen las tácticas y técnicas implementadas para abord
 
 
 ## 5. Repositorio del proyecto
-
-Para utilizar el proyecto simplemente clona el repositorio principal, el cual ya incluye todos los submódulos necesarios:
+* Puede acceder al proyecto por medio de: https://gradex.space
+* Para descargar la aplicacion de escritorio, puedes descargarlo de: https://drive.google.com/drive/folders/1sZOGRAUARZDUAfDL4Kh2wrnzubOO6FbK?usp=sharing
+* Para utilizar el proyecto localmente simplemente clona el repositorio principal, el cual ya incluye todos los submódulos necesarios:
 
 ```bash
-git clone --recursive https://github.com/Swarch2F/prototipo3.git
+git clone --recursive https://github.com/Swarch2F/prototipo4.git
 cd prototipo3
 ```
 
@@ -546,7 +547,7 @@ git submodule add https://github.com/Swarch2F/broker.git components/broker
 git submodule add https://github.com/Swarch2F/api-gateway.git components/api-gateway
 ```
 
-### Actualización de submódulos recursivamente (por primer vez, una vez clonado el proyecto. Si realizo el clonado con "git clone --recursive" no es necesario):
+### Actualización de submódulos recursivamente (Si realizo el clonado con "git clone --recursive" no es necesario):
 
 ```bash
 git submodule update --init --recursive
@@ -556,9 +557,8 @@ git submodule update --remote --merge --recursive
 ### Levantar el prototipo con Docker Compose
 
 El proyecto utiliza Docker Compose para gestionar la ejecución de todos los servicios.
-Para descargar la aplicacion de escritorio, puedes descargarlo de: https://drive.google.com/drive/folders/1sZOGRAUARZDUAfDL4Kh2wrnzubOO6FbK?usp=sharing
 
-### Ejecución rápida
+### Ejecución
 
 Una vez clonado el proyecto, ejecuta:
 
@@ -567,4 +567,4 @@ docker compose up --build
 ```
 
 ---
-**© 2025 Swarch2F. GRADEX Prototipo 3** 
+**© 2025 Swarch2F. GRADEX Prototipo 4** 
