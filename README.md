@@ -621,6 +621,11 @@ Este punto marca el límite a partir del cual el sistema deja de escalar eficien
 *Service Discovery Pattern*: En entornos dinámicos como GKE, este patrón permite que los servicios se localicen y comuniquen entre sí automáticamente, incluso al escalar o reemplazar instancias. GRADEX lo usa para gestionar la conexión entre frontend y backends, asegurando que las solicitudes siempre encuentren los endpoints correctos sin configuraciones estáticas.
 
 
+### Interoperability 
+
+![Escenarios Seguridad y rendimiento - Interoperabilidad ](https://github.com/user-attachments/assets/5560e302-ad39-4e25-90f6-edf61a90e1c9)
+
+
 
 ## 5. Repositorio del proyecto
 * Puede acceder al proyecto por medio de: https://gradex.space
