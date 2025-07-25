@@ -584,6 +584,26 @@ Este punto marca el límite a partir del cual el sistema deja de escalar eficien
 
 
 
+### Reliability
+
+#### Reliability (high availability, resilience or fault tolerance) scenarios.
+
+![Escenarios Seguridad y rendimiento - Replication Pattern ](https://github.com/user-attachments/assets/cee1d16e-8a5a-4c80-bef8-925f505901c6)
+
+<br>
+
+![Escenarios Seguridad y rendimiento - Service Discovery Pattern](https://github.com/user-attachments/assets/0b77b919-f5c7-46b9-afac-52108c9e474a)
+
+<br>
+
+![Escenarios Seguridad y rendimiento - Cluster Pattern](https://github.com/user-attachments/assets/b97d32d0-aae6-4275-9237-cb87f9c3ac1f)
+
+<br>
+
+![Escenarios Seguridad y rendimiento - Passive Replication Pattern](https://github.com/user-attachments/assets/29cf2c21-0501-4bfc-95c8-f4f92cdf9181)
+
+
+
 
 ## 5. Repositorio del proyecto
 * Puede acceder al proyecto por medio de: https://gradex.space
