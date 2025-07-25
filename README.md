@@ -515,11 +515,73 @@ A continuación, se describen las tácticas y técnicas implementadas para abord
 * **Cache-Aside Pattern** (también llamado Lazy Loading) es un patrón de rendimiento que mejora la escalabilidad al almacenar temporalmente datos frecuentemente consultados en una capa de caché rápida. Cuando el sistema recibe una solicitud, primero verifica si los datos están en caché; si no existen o están expirados, los consulta de la base de datos principal, los almacena en caché y luego los devuelve. Esto acelera los tiempos de respuesta para consultas repetitivas. **MImprove Efficiency**
 
 #### Performance testing analysis and results
-![WhatsApp Image 2025-07-07 at 11 49 05 PM](https://github.com/user-attachments/assets/7f31cb7a-96fe-4eae-9d1f-3ae916bfa2ac)
+<img width="869" height="291" alt="image" src="https://github.com/user-attachments/assets/8c73175b-8054-49e6-a8c6-81dc48215154" />
+
 
 <br>
 
-![WhatsApp Image 2025-07-07 at 11 48 02 PM](https://github.com/user-attachments/assets/c41077dc-d797-4774-bbf0-22e1d59f6d23)
+<img width="682" height="570" alt="image" src="https://github.com/user-attachments/assets/5b007a07-645b-4f74-b1fd-c054539315fb" />
+
+###  Descripción general
+
+Estas pruebas evalúan el rendimiento de nuestro proyecto bajo carga de usuarios concurrentes, considerando dos escenarios distintos:
+
+- **Escenario #1:** Sin aplicar el patrón de Redundancia Pasiva.
+- **Escenario #2:** Con el patrón de Redundancia Pasiva (orientado a la confiabilidad del sistema, más que al rendimiento).
+
+Aunque el patrón de redundancia busca mejorar la disponibilidad y tolerancia a fallos, también tiene un impacto positivo en el rendimiento del sistema.
+
+
+
+### Análisis de la gráfica (Curva de rodilla)
+
+El tiempo de respuesta (en ms) aumenta conforme crece el número de usuarios concurrentes:
+
+- Hasta **50 usuarios**, ambos escenarios se comportan de forma similar con diferencias mínimas.
+- A partir de **200 usuarios**, el tiempo de respuesta comienza a incrementarse más rápidamente.
+- Se identifica una **curva de rodilla clara alrededor de los 500 usuarios**, donde el rendimiento se degrada de forma más notoria.
+
+Este punto marca el límite a partir del cual el sistema deja de escalar eficientemente.
+
+
+### Comparación de resultados
+
+#### Escenario #1 (Sin Redundancia)
+| Usuarios | Tiempo de Respuesta (ms) | Throughput (trans/min) |
+|----------|---------------------------|--------------------------|
+| 1        | 288,33                    | 46,6                     |
+| 5        | 289,33                    | 232,7                    |
+| 50       | 521                       | 1972,4                   |
+| 200      | 1541                      | 4722,6                   |
+| 500      | 3220,67                   | 7107,9                   |
+| 1000     | 5468,33                   | 9276,0                   |
+
+#### Escenario #2 (Con Redundancia)
+| Usuarios | Tiempo de Respuesta (ms) | Throughput (trans/min) |
+|----------|---------------------------|--------------------------|
+| 1        | 292,33                    | 46,4                     |
+| 5        | 170                       | 256,4                    |
+| 50       | 484,33                    | 2021,1                   |
+| 200      | 1460                      | 4878,0                   |
+| 500      | 2749,33                   | 8001,4                   |
+| 1000     | 4075                      | 11822,7                  |
+
+
+###  Observaciones
+
+- **El Escenario #2 supera ligeramente al Escenario #1** tanto en tiempo de respuesta como en throughput, especialmente con mayor carga.
+- El **patrón de Redundancia Pasiva no penaliza el rendimiento**, y en muchos casos lo mejora.
+- La **curva de rodilla se presenta cerca de los 500 usuarios**, lo que indica el límite óptimo de carga antes de una degradación severa.
+
+
+
+###  Conclusiones
+
+- **El Escenario #2** (con redundancia) es más adecuado para producción gracias a:
+  - Mayor throughput bajo carga.
+  - Tiempos de respuesta iguales o menores.
+  - Mejora en la confiabilidad del sistema.
+
 
 
 
