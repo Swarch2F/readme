@@ -28,7 +28,8 @@
 
 ### Component-and Connector (C&C) Structure
 
-![Copy of Diagrama C C](https://github.com/user-attachments/assets/f30b778b-27ed-40d6-999a-5e5e165c3197)
+<img width="3003" height="4365" alt="Copy of Diagrama C C" src="https://github.com/user-attachments/assets/75287990-101d-458a-b350-d7b90543bc58" />
+
 
 
 #### **Description of architectural styles and patterns used**
@@ -116,6 +117,8 @@ El sistema presenta una separación clara entre el cliente (frontend) y los serv
 * Tecnología: Go
 
 * Función: Autenticación y emisión de JWT
+  
+* Replicación pasiva: Tiene una segunda instancia exactamente igual a la primera que se activa, cuando la primera falla.
 
 * DB: PostgreSQL (`GX_DB_Auth`) vía lib pgx.
 
