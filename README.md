@@ -284,7 +284,8 @@ El sistema presenta una separación clara entre el cliente (frontend) y los serv
 ### Deployment Structure
 #### Deployment View
 
-![Copy of Diagrama de Despliegue](https://github.com/user-attachments/assets/d1159354-c255-487b-a1c1-e49460d87460)
+<img width="4670" height="2530" alt="Blank board" src="https://github.com/user-attachments/assets/586c881f-b6fa-4a82-8d05-ba58ff1aed5b" />
+
 
 **Este sistema está compuesto por múltiples microservicios y componentes backend que se ejecutan dentro de una red privada Docker, expuestos mediante NGINX y balanceadores, y un cliente de escritorio desarrollado con Electron.js, que opera desde el equipo del usuario. Los servicios se comunican usando HTTP, AMQP o TCP/IP según su función.** 
 
